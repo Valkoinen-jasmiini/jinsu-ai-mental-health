@@ -1,0 +1,45 @@
+# 复制此文件为 application.yml 并填入你自己的配置
+# cp application-example.yml application.yml
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/mental_health_assistant?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8"
+    username: root
+    password: root
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  ai:
+    openai:
+      chat:
+        options:
+          model: deepseek-ai/DeepSeek-V4-Flash
+          tool-calling:
+            enabled: true
+        completions-path: /v1/chat/completions
+      api-key: sk-your_siliconflow_api_key_here
+      base-url: https://api.siliconflow.cn
+
+
+server:
+  port: 1236
+
+# JWT配置
+jwt:
+  secret: MySecretKeyForJWT2025!@#$%^&*()_+SecureKeyHere
+  expiration: 86400000  # 24小时(毫秒)
+  refresh-expiration: 604800000  # 7天(毫秒)
+  header: Authorization # token头部名称
+  token-prefix: "Bearer " # token前缀

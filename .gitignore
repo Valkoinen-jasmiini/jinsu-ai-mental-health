@@ -1,0 +1,46 @@
+# ==================== 通用 ====================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ==================== 前端 (ai-vue) ====================
+node_modules/
+dist/
+dist-ssr/
+*.local
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ==================== 后端 (ai-springboot) ====================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+HELP.md
+.mvn/wrapper/maven-wrapper.jar
+
+# 编译产物
+*.class
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ==================== 敏感文件 ====================
+application.yml
+.env
+.env.local
