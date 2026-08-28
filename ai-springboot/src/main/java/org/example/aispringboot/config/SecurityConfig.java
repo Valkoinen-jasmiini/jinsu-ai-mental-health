@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +39,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public RequestAttributeSecurityContextRepository securityContextRepository() {
+        return new RequestAttributeSecurityContextRepository();
+    }
+
+    @Bean
     public JwtAuthticationFilter jwtAuthticationFilter() {
         return new JwtAuthticationFilter();
     }
@@ -49,6 +55,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // 配置会话管理为无状态（JWT需要）
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 配置 SecurityContext 使用 RequestAttribute 仓库，确保 SSE 异步调度时上下文存活
+                .securityContext(securityContext -> securityContext
+                        .securityContextRepository(securityContextRepository())
+                )
                 // 配置请求的授权规则
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_PATHS).permitAll()

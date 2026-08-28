@@ -36,6 +36,10 @@ public class EmotionDiaryService {
     @Autowired
     private UserMapper userMapper;
 
+    // 情绪风险预警服务(日记提交后自动检查是否触发预警)
+    @Autowired
+    private RiskAlertService riskAlertService;
+
     // 1-10 分 → 中文兜底标签 + 颜色
     // 1-2 很差, 3-4 低落, 5-6 一般, 7-8 不错, 9-10 开心
     private static final int[][] SCORE_RANGES = {
@@ -111,6 +115,10 @@ public class EmotionDiaryService {
                 .build();
 
         emotionDiaryMapper.insert(entity);
+
+        // 提交后进行情绪风险检查(连续低分/高危情绪词),异常不影响日记提交
+        riskAlertService.checkDiaryRisk(entity);
+
         return entity;
     }
 

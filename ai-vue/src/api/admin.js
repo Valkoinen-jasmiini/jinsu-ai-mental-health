@@ -337,4 +337,182 @@ export const updateUserPassword = (data) => {
   })
 }
 
+// ========== 管理端-用户管理(仅管理员) ==========
+
+// 分页查询用户列表(keyword可按用户名/昵称/邮箱/手机号模糊搜索)
+export const getAdminUserPage = (params = {}) => {
+  return request({
+    url: '/admin/user/page',
+    method: 'get',
+    params
+  })
+}
+
+// 用户统计数据(总用户/正常/禁用/管理员数量)
+export const getAdminUserStats = () => {
+  return request({
+    url: '/admin/user/stats',
+    method: 'get'
+  })
+}
+
+// 用户详情(含日记数/会话数/收藏数)
+export const getAdminUserDetail = (id) => {
+  return request({
+    url: `/admin/user/${id}`,
+    method: 'get'
+  })
+}
+
+// 查看指定用户的历史情绪日记
+export const getAdminUserDiaries = (id) => {
+  return request({
+    url: `/admin/user/${id}/diaries`,
+    method: 'get'
+  })
+}
+
+// 查看指定用户的历史AI咨询会话列表
+export const getAdminUserSessions = (id) => {
+  return request({
+    url: `/admin/user/${id}/sessions`,
+    method: 'get'
+  })
+}
+
+// 查看指定用户某条会话的全部对话消息
+export const getAdminSessionMessages = (userId, sessionId) => {
+  return request({
+    url: `/admin/user/${userId}/sessions/${sessionId}/messages`,
+    method: 'get'
+  })
+}
+
+// 启用/禁用用户账号 status: 1启用 0禁用
+export const updateAdminUserStatus = (id, status) => {
+  return request({
+    url: `/admin/user/${id}/status`,
+    method: 'put',
+    params: { status }
+  })
+}
+
+// ========== 管理端-知识库管理(仅管理员) ==========
+
+// 查询全部分类(含停用)并统计各分类文章数
+export const getAdminCategories = () => {
+  return request({
+    url: '/knowledge/admin/categories',
+    method: 'get'
+  })
+}
+
+// 新增分类
+export const addAdminCategory = (data) => {
+  return request({
+    url: '/knowledge/admin/categories',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑分类
+export const updateAdminCategory = (id, data) => {
+  return request({
+    url: `/knowledge/admin/categories/${id}`,
+    method: 'put',
+    data
+  })
+}
+
+// 删除分类(分类下有文章时会被后端拒绝)
+export const deleteAdminCategory = (id) => {
+  return request({
+    url: `/knowledge/admin/categories/${id}`,
+    method: 'delete'
+  })
+}
+
+// 分页查询全部文章(含下架,可按分类/关键词过滤)
+export const getAdminArticles = (params = {}) => {
+  return request({
+    url: '/knowledge/admin/articles',
+    method: 'get',
+    params
+  })
+}
+
+// 文章详情(编辑用,不增加阅读数)
+export const getAdminArticleDetail = (id) => {
+  return request({
+    url: `/knowledge/admin/articles/${id}`,
+    method: 'get'
+  })
+}
+
+// 新增文章
+export const addAdminArticle = (data) => {
+  return request({
+    url: '/knowledge/admin/articles',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑文章
+export const updateAdminArticle = (id, data) => {
+  return request({
+    url: `/knowledge/admin/articles/${id}`,
+    method: 'put',
+    data
+  })
+}
+
+// 删除文章(级联删除收藏与阅读历史)
+export const deleteAdminArticle = (id) => {
+  return request({
+    url: `/knowledge/admin/articles/${id}`,
+    method: 'delete'
+  })
+}
+
+// ========== 管理端-风险预警(仅管理员) ==========
+
+// 分页查询预警列表(status: 0待处理 1已处理,不传查全部)
+export const getAlertPage = (params = {}) => {
+  return request({
+    url: '/admin/alert/page',
+    method: 'get',
+    params
+  })
+}
+
+// 预警统计(总数/待处理/已处理/今日新增)
+export const getAlertStats = () => {
+  return request({
+    url: '/admin/alert/stats',
+    method: 'get'
+  })
+}
+
+// 处理预警(标记已处理并记录备注)
+export const handleAlert = (id, remark) => {
+  return request({
+    url: `/admin/alert/${id}/handle`,
+    method: 'put',
+    params: { remark }
+  })
+}
+
+// ========== 管理端-操作审计日志(仅管理员) ==========
+
+// 分页查询操作日志(module模块筛选,keyword模糊搜索)
+export const getOperationLogPage = (params = {}) => {
+  return request({
+    url: '/admin/log/page',
+    method: 'get',
+    params
+  })
+}
+
 

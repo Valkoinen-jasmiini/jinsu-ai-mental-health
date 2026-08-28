@@ -75,23 +75,26 @@ const isAdmin = computed(() => {
   return userInfo.value.uesrType === 2 || userInfo.value.roleType === '2'
 })
 
-// 菜单项（带图标）
-const allMenus = [
+// 普通用户菜单（用户端功能保持不变）
+const userMenus = [
   { key: 'home', label: '首页', path: '/home', icon: '🏠' },
   { key: 'consultation', label: 'AI咨询', path: '/consultation', icon: '💬' },
   { key: 'emotional', label: '情绪日记', path: '/emotional', icon: '📝' },
   { key: 'knowledge', label: '知识库', path: '/knowledge', icon: '📚' }
 ]
 
-// 数据分析菜单（仅管理员可见）
-const dashboardMenu = { key: 'dashboard', label: '数据分析', path: '/dashboard', icon: '📊' }
+// 管理员菜单（最终结构：用户管理/风险预警/数据分析/知识库管理/操作日志）
+const adminMenus = [
+  { key: 'userManage', label: '用户管理', path: '/users', icon: '👥' },
+  { key: 'riskAlert', label: '风险预警', path: '/alerts', icon: '🚨' },
+  { key: 'dashboard', label: '数据分析', path: '/dashboard', icon: '📊' },
+  { key: 'knowledgeAdmin', label: '知识库管理', path: '/knowledge-admin', icon: '📚' },
+  { key: 'operationLog', label: '操作日志', path: '/logs', icon: '📋' }
+]
 
-// 根据角色过滤菜单
+// 根据角色过滤菜单：管理员只显示后台管理菜单，普通用户菜单不变
 const visibleMenus = computed(() => {
-  if (isAdmin.value) {
-    return [dashboardMenu, ...allMenus]
-  }
-  return allMenus
+  return isAdmin.value ? adminMenus : userMenus
 })
 
 // 当前激活的菜单

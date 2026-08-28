@@ -73,6 +73,10 @@ public class User {
     @TableField("updated_at")
     private LocalDateTime updatedAt;
 
+    // 最近活跃时间(登录/请求时更新,供管理端用户管理展示)
+    @TableField("last_active_time")
+    private LocalDateTime lastActiveTime;
+
 //    /**
 //     * 是否为普通用户
 //     */

@@ -25,6 +25,26 @@ const routes = [
         meta: { title: '数据分析', navKey: 'dashboard', requiresAdmin: true }
       },
       {
+        path: 'alerts',
+        component: () => import('@/views/riskAlert.vue'),
+        meta: { title: '风险预警', navKey: 'riskAlert', requiresAdmin: true }
+      },
+      {
+        path: 'logs',
+        component: () => import('@/views/operationLog.vue'),
+        meta: { title: '操作日志', navKey: 'operationLog', requiresAdmin: true }
+      },
+      {
+        path: 'users',
+        component: () => import('@/views/userManage.vue'),
+        meta: { title: '用户管理', navKey: 'userManage', requiresAdmin: true }
+      },
+      {
+        path: 'knowledge-admin',
+        component: () => import('@/views/knowledgeManage.vue'),
+        meta: { title: '知识库管理', navKey: 'knowledgeAdmin', requiresAdmin: true }
+      },
+      {
         path: 'home',
         component: () => import('@/views/home.vue'),
         meta: { title: '首页', navKey: 'home' }

@@ -50,6 +50,10 @@ public class UserService {
             throw new BusinessException("用户已被禁用,请联系管理员");
         }
 
+        // 更新最近活跃时间
+        user.setLastActiveTime(java.time.LocalDateTime.now());
+        userMapper.updateById(user);
+
         // 生成token
         String token = JwtTokenUtil.generateToken(user.getId(), user.getUsername(), user.getUserType());
         System.out.println(token);
@@ -113,6 +117,24 @@ public class UserService {
             throw new BusinessException("用户不存在");
         }
         return UserConvert.entityToDetailResponse(user);
+    }
+
+    /**
+     * 更新用户最近活跃时间(带5分钟节流,避免每个请求都写库)
+     * 供 JWT 认证过滤器在认证成功后调用
+     */
+    public void touchLastActive(Long userId) {
+        try {
+            com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<User> wrapper =
+                    new com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper<>();
+            wrapper.eq(User::getId, userId)
+                    .and(w -> w.isNull(User::getLastActiveTime)
+                            .or().lt(User::getLastActiveTime, java.time.LocalDateTime.now().minusMinutes(5)))
+                    .set(User::getLastActiveTime, java.time.LocalDateTime.now());
+            userMapper.update(null, wrapper);
+        } catch (Exception e) {
+            // 活跃时间更新失败不影响正常请求
+        }
     }
 
     /**

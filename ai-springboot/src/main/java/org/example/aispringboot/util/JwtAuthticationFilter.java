@@ -13,7 +13,9 @@ import org.example.aispringboot.enumClass.UserStatus;
 import org.example.aispringboot.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,6 +26,9 @@ import java.util.List;
 public class JwtAuthticationFilter extends OncePerRequestFilter {
     @Resource
     private UserService userService;
+
+    @Resource
+    private RequestAttributeSecurityContextRepository securityContextRepository;
 
     @Override
     protected  boolean shouldNotFilter(HttpServletRequest request) {
@@ -52,6 +57,9 @@ public class JwtAuthticationFilter extends OncePerRequestFilter {
                 UserLoginResponseDTO.UserDetailResponseDTO user = userService.getUserById(validationResult.getUserId());
                 System.out.println(JSONUtil.parseObj(user));
                 if (user != null && UserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                    // 认证成功,更新用户最近活跃时间(5分钟节流)
+                    userService.touchLastActive(validationResult.getUserId());
+
                     //4.创建Spring Security认证对象
                     List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                             new SimpleGrantedAuthority("ROLE_" + validationResult.getRoleType())
@@ -64,18 +72,25 @@ public class JwtAuthticationFilter extends OncePerRequestFilter {
                     );
 
                     // 设置认证信息到Spring Security上下文
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContext context = SecurityContextHolder.getContext();
+                    context.setAuthentication(authentication);
 
-// 将token存储到请求属性中
+                    // 通过 RequestAttributeSecurityContextRepository 保存上下文，
+                    // 确保在 SSE 异步调度时 SecurityContext 能够存活
+                    securityContextRepository.saveContext(context, request, response);
+
+                    // 将token存储到请求属性中
                     request.setAttribute("jwtToken", token);
 
                 } else {
                     clearSecurityContext();
                     ResponseUtil.writeError(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);
+                    return;
                 }
             } else {
                 clearSecurityContext();
                 ResponseUtil.writeError(response, ResultCode.TOKEN_INVALID);
+                return;
             }
 
 
