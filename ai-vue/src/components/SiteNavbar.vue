@@ -1,11 +1,6 @@
 <template>
   <header class="site-navbar">
     <div class="nav-inner">
-      <div class="brand" @click="goHome">
-        <el-icon class="brand-icon"><Cpu /></el-icon>
-        <span class="brand-text">瑾肃AI助手</span>
-      </div>
-
       <nav class="menu">
         <router-link
           v-for="item in visibleMenus"
@@ -19,6 +14,8 @@
           <span class="link-text">{{ item.label }}</span>
         </router-link>
       </nav>
+
+      <div class="slogan">去爱 · 去生活 · 去受伤</div>
 
       <div class="right">
         <el-dropdown v-if="userInfo.nickname || userInfo.username" trigger="click" @command="handleCommand">
@@ -49,7 +46,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Cpu, SwitchButton, ArrowDown, User } from '@element-plus/icons-vue'
+import { SwitchButton, ArrowDown, User } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -92,15 +89,6 @@ const visibleMenus = computed(() => {
 
 const currentKey = computed(() => route.meta.navKey)
 
-// 点击logo跳转
-const goHome = () => {
-  if (isAdmin.value) {
-    router.push('/dashboard')
-  } else {
-    router.push('/home')
-  }
-}
-
 // 下拉菜单命令处理
 function handleCommand(command) {
   if (command === 'logout') {
@@ -137,36 +125,13 @@ function handleLogout() {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 
   .nav-inner {
-    max-width: 1440px;
+    max-width: 1200px;
     margin: 0 auto;
     height: 100%;
     padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    user-select: none;
-
-    .brand-icon {
-      font-size: 28px;
-      color: #2d7d7f;
-    }
-
-    .brand-text {
-      font-size: 18px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #2d7d7f 0%, #4fd1c5 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 0.5px;
-    }
   }
 
   .menu {
@@ -224,6 +189,15 @@ function handleLogout() {
         }
       }
     }
+  }
+
+  .slogan {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    color: #9ca3af;
+    font-style: italic;
+    letter-spacing: 1px;
   }
 
   .right {

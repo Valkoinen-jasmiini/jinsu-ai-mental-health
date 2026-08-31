@@ -3,7 +3,7 @@
     <!-- Logo 区域 -->
     <div class="sidebar-header">
       <div class="logo">
-        <el-icon class="logo-icon"><Cpu /></el-icon>
+        <img class="logo-icon" src="@/assets/images/机器人.png" alt="瑾肃AI" />
         <span v-show="!collapsed" class="logo-text">瑾肃AI</span>
       </div>
     </div>
@@ -47,7 +47,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Cpu, ArrowLeft, ArrowRight, User } from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowRight, User } from '@element-plus/icons-vue'
 import { useSidebar } from '@/composables/useSidebar'
 
 const route = useRoute()
@@ -148,8 +148,8 @@ function handleLogout() {
   cursor: pointer;
 
   .logo-icon {
-    font-size: 32px;
-    color: #4fd1c5;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
   }
 
